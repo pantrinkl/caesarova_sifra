@@ -1,103 +1,104 @@
-# definovani funkci
+# defining functions
 
-# nacteni vstupnich dat
-def nacist_text(soubor):
+# load input data
+def load_text(textfile):
     try:
-        with open(soubor, 'r') as h:
-            obsah = h.readlines() 
-        return obsah
+        with open(textfile, 'r') as h:
+            content = h.readlines() 
+        return content
     except FileNotFoundError:
-        exit("Nenalezen vstupní soubor vstup.txt")
+        exit("Nenalezen vstupní soubor.")
     except PermissionError:
-        exit("Nemám přístup k vstupnímu souboru vstup.txt")
+        exit("Nemám přístup k vstupnímu souboru.")
 
-# zaklicovani abecedy - tj. vytvoreni nove abecedy dle klice
-def zaklicovani(klic):
-    abc_velka = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    abc_mala = "abcdefghijklmnopqrstuvwxyz"
-    nova_velka = list(abc_velka)
-    nova_mala = list(abc_mala)
-    # zaklicovani predni casti nove abecedy
-    for i in range(len(abc_velka)-klic):
-        nova_velka[i] = abc_velka[i+klic]
-        nova_mala[i] = abc_mala[i+klic]
-    # zaklicovani konce nove abecedy
-    for k in range(klic):
-        nova_velka[len(abc_velka)-1-k]=abc_velka[klic-k-1]
-        nova_mala[len(abc_mala)-1-k]=abc_mala[klic-k-1]
-    return(abc_velka, abc_mala, nova_velka, nova_mala)
+# generate new alphabet with key
+def generate_abc(key):
+    abc_big = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    abc_small = "abcdefghijklmnopqrstuvwxyz"
+    new_big = list(abc_big)
+    new_small = list(abc_small)
+    for i in range(len(abc_big)-key):
+        new_big[i] = abc_big[i+key]
+        new_small[i] = abc_small[i+key]
+    for k in range(key):
+        new_big[len(abc_big)-1-k]=abc_big[key-k-1]
+        new_small[len(abc_small)-1-k]=abc_small[key-k-1]
+    return(abc_big, abc_small, new_big, new_small)
 
-# prevod textu do cesarovy sifry
-def do_cesara(vstup, klic):
-    abc_velka, abc_mala, nova_velka, nova_mala = zaklicovani(klic)
-    vystup = list(vstup)
-    for i in range(len(vstup)):
-        if vstup[i] in abc_velka:
-            kdeje = abc_velka.find(vstup[i])
-            vystup[i] = nova_velka[kdeje]
-        elif vstup[i] in abc_mala:
-            kdeje = abc_mala.find(vstup[i])
-            vystup[i] = nova_mala[kdeje]
+# generate text into Caesars cipher
+def to_cesar(intext, key):
+    abc_big, abc_small, new_big, new_small = generate_abc(key)
+    outtext = list(intext)
+    for i in range(len(intext)):
+        if intext[i] in abc_big:
+            where = abc_big.find(intext[i])
+            outtext[i] = new_big[where]
+        elif intext[i] in abc_small:
+            where = abc_small.find(intext[i])
+            outtext[i] = new_small[where]
         else:
-            vystup[i] = vstup[i]
-    return(vystup)
+            outtext[i] = intext[i]
+    return(outtext)
 
-# prevod textu zpet z cesarovy sifry do citelneho
-def z_cesara(vystup, klic):
-    abc_velka, abc_mala, nova_velka, nova_mala = zaklicovani(klic)
-    zpatky = list(vystup)
-    for i in range(len(vystup)):
-        if vystup[i] in abc_velka:
-            kdeje = nova_velka.index(vystup[i])
-            zpatky[i] = abc_velka[kdeje]
-        elif vystup[i] in abc_mala:
-            kdeje = nova_mala.index(vystup[i])
-            zpatky[i] = abc_mala[kdeje]
+# generate text from Caesars cipher to regular
+def from_cesar(outtext, key):
+    abc_big, abc_small, new_big, new_small = generate_abc(key)
+    back = list(outtext)
+    for i in range(len(outtext)):
+        if outtext[i] in abc_big:
+            where = new_big.index(outtext[i])
+            back[i] = abc_big[where]
+        elif outtext[i] in abc_small:
+            where = new_small.index(outtext[i])
+            back[i] = abc_small[where]
         else:
-            zpatky[i] = vystup[i]
-    return(zpatky)
+            back[i] = outtext[i]
+    return(back)
 
-# zasifrovani textu a ulozeni do souboru
-def uloz_sifru(co, kam, klic):
+# save text in Caesars cipher to text file
+def save_cipher(what, where, key):
     try:
-        with open(kam,'w') as k:
-            for radek in co:
-                vcezaru = do_cesara(radek, klic)
-                for i in vcezaru:
+        with open(where,'w') as k:
+            for line in what:
+                incesar = to_cesar(line, key)
+                for i in incesar:
                     k.write(str(i))
     except PermissionError:
         exit("Nemám přístup k výstupnímu souboru zaklicovane.txt")
 
-# rozsifrovani textu a ulozeni do souboru
-def uloz_rozklicovane(co, kam, klic):
+# save text from Caesars cipher to text file
+def save_decrypted(what, where, key):
     try:
-        with open(kam,'w') as k:
-            for radek in co:
-                zcezara = z_cesara(radek, klic)
-                for i in zcezara:
+        with open(where,'w') as k:
+            for line in what:
+                fromcesar = from_cesar(line, key)
+                for i in fromcesar:
                     k.write(str(i))
     except PermissionError:
         exit("Nemám přístup k výstupnímu souboru rozklicovane.txt")
 
-# hlavni cast programu
+# main program
 
-# nacteni hodnoty klice od uzivatele
+# get key value from user
 p=1
 while p==1: 
     try:
-        klic = int(input("Zadej hodnotu klice:"))
-        if klic<0 or klic>26:
+        key = int(input("Zadej hodnotu klice: "))
+        if key<0 or key>26:
             print("Klíč musí být v rozsahu 0 - 26")
         else:
             p+=1
     except ValueError:
         exit("Hodnota klíče musí být celé číslo.")
 
-# nacteni textu ze souboru vstup.txt 
-vstupni_text = nacist_text('vstup.txt')
-# ulozeni zasifrovaneho textu do zaklicovane.txt
-uloz_sifru(vstupni_text,'zaklicovane.txt', klic)
-# nacteni zasifrovaneho textu
-zasifrovany_text = nacist_text('zaklicovane.txt')
-# rozklicovani zasifrovaneho textu a ulozeni do souboru rozklicovane.txt
-uloz_rozklicovane(zasifrovany_text,'rozklicovane.txt',klic)
+# get input file name from user
+input_name = str(input("Zadejte název vstupního souboru: "))
+
+# load text from file: vstup.txt 
+input_text = load_text(input_name)
+# save translated text to Caesars cipher to file: zaklicovane.txt
+save_cipher(input_text,'zaklicovane.txt', key)
+# load translated text
+encrypted_text = load_text('zaklicovane.txt')
+# save translated text to readable format to: rozklicovane.txt
+save_decrypted(encrypted_text,'rozklicovane.txt',key)

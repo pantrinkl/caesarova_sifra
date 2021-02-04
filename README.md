@@ -5,13 +5,13 @@ Zašifrovaný text je uložen do textového souboru.
 Po zašifrování je provedeno opětovné rozšifrování ze zašifrovaného souboru a rozklíčovaný text je uložen do dalšího textového souboru.
 
 ## Vstupní data 
-Ve složce, kde je uložen `.py` soubor, je nutné mít soubor:
-* `vstup.txt`\
-V souboru je třeba mít text, který má být zašifrován.\
+Po spuštění programu je nutné zadat:
+* Jméno vstupního souboru.\
+V textovém souboru je třeba mít text, který má být zašifrován.\
 Zašifrovány jsou pouze malá a velká písmena bez diakritiky.\
-Písmena s diakritikou, čísla a další znaky zůstavají nezašifrované.
-
-Dále je nutné po spuštění programu zadat celočíselnou hodnotu pro klíč. Tím je myšlena hodnota, o kolik se zašifrovaná abeceda posune vůči původní.
+Písmena s diakritikou, čísla a další znaky zůstavají nezašifrované.\
+* Celočíselnou hodnotu pro klíč.\
+Tím je myšlena hodnota, o kolik se zašifrovaná abeceda posune vůči původní.
 
 ## Výstupní data
 Zašifrovaný text je uložen do souboru `zaklicovane.txt`. 
