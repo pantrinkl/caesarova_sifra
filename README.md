@@ -9,7 +9,7 @@ Po spuštění programu je nutné zadat:
 * Jméno vstupního souboru.\
 V textovém souboru je třeba mít text, který má být zašifrován.\
 Zašifrovány jsou pouze malá a velká písmena bez diakritiky.\
-Písmena s diakritikou, čísla a další znaky zůstavají nezašifrované.\
+Písmena s diakritikou, čísla a další znaky zůstavají nezašifrované.
 * Celočíselnou hodnotu pro klíč.\
 Tím je myšlena hodnota, o kolik se zašifrovaná abeceda posune vůči původní.
 
